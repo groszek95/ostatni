@@ -1,25 +1,46 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Form from "./Komponenty/Form";
+import Subpage from "./Subpage";
+import FormData from "./FormData";
+import "./App.css";
 
-function App() {
+const App = () => {
+  const [formData, setFormData] = useState([]);
+
+  const handleSubmit = (data) => {
+    setFormData((prevData) => [...prevData, data]);
+  };
+
+  const handleDelete = (index) => {
+    setFormData((prevData) => {
+      const newData = [...prevData];
+      newData.splice(index, 1);
+      return newData;
+    });
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="bg-yellow-50 bg-size">
+      <Router>
+        <div>
+          <Routes>
+            <Route path="/" element={<Form handleSubmit={handleSubmit} />} />
+            <Route
+              path="/subpage"
+              element={
+                <Subpage formData={formData} handleDelete={handleDelete} />
+              }
+            />
+            <Route
+              path="/subpage/:id"
+              element={<FormData formData={formData} />}
+            />
+          </Routes>
+        </div>
+      </Router>
     </div>
   );
-}
+};
 
 export default App;
